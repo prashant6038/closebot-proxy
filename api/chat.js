@@ -1,29 +1,32 @@
-// api/chat.js
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Only POST requests allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Method not allowed" });
   }
 
-  const { message, name, email } = req.body;
+  const { message } = req.body;
+
+  if (!message) {
+    return res.status(400).json({ message: "Missing message" });
+  }
 
   try {
-    const response = await fetch('https://api.closebot.ai/message', {
-      method: 'POST',
+    const closebotResponse = await fetch("https://api.closebot.ai/message", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer v3PXUAV7pAS5bl3_QI8h7Q' // <--- Replace with your Closebot API key
+        accept: "application/json",
+        "content-type": "application/json",
+        Authorization: "Bearer v3PXUAV7pAS5bl3_QI8h7Q", // <<-- Insert your API key here
       },
       body: JSON.stringify({
+        bot_id: "35831", // <<-- Insert your Bot ID here
         message: message,
-        name: name,
-        email: email
       }),
     });
 
-    const data = await response.json();
+    const data = await closebotResponse.json();
     res.status(200).json(data);
-
   } catch (error) {
-    res.status(500).json({ message: 'Something went wrong', error: error.message });
+    console.error("CloseBot Proxy Error:", error);
+    res.status(500).json({ message: "Something went wrong" });
   }
 }
