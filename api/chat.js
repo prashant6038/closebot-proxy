@@ -1,29 +1,34 @@
-import cors from 'cors';
-
-const corsOptions = {
-    origin: ['https://marketmd.io', 'https://*.framer.app'], // Allow your Framer domain
-    methods: ['POST', 'OPTIONS'], // Include OPTIONS for preflight requests
-    allowedHeaders: ['Content-Type', 'Accept'],
-};
-
 export default async function handler(req, res) {
-    // Apply CORS middleware
-    await new Promise((resolve) => cors(corsOptions)(req, res, resolve));
+    // Manually set CORS headers
+    res.setHeader('Access-Control-Allow-Origin', 'https://marketmd.io');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept');
 
-    // Handle preflight OPTIONS requests explicitly
+    // Log headers to confirm they are set
+    console.log('Setting CORS Headers:', {
+        'Access-Control-Allow-Origin': 'https://marketmd.io',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Accept'
+    });
+
+    // Handle preflight OPTIONS requests
     if (req.method === 'OPTIONS') {
+        console.log('Handling OPTIONS request');
         return res.status(200).end();
     }
 
-    console.log('Request Origin:', req.headers.origin); // Log the origin to verify
+    console.log('Request Origin:', req.headers.origin);
+    console.log('Request Method:', req.method);
 
     if (req.method !== 'POST') {
+        console.log('Method not allowed:', req.method);
         return res.status(405).json({ message: 'Method not allowed' });
     }
 
     const { message } = req.body;
 
     if (!message) {
+        console.log('Missing message in request body');
         return res.status(400).json({ message: 'Missing message' });
     }
 
