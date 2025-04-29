@@ -1,0 +1,13 @@
+{
+    "name": "closebot-backend",
+    "version": "1.0.0",
+    "scripts": {
+        "start": "vercel dev"
+    },
+    "dependencies": {
+        "cors": "^2.8.5"
+    },
+    "engines": {
+        "node": "18.x"
+    }
+}
