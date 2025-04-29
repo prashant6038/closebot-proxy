@@ -38,7 +38,7 @@ export default async function handler(req, res) {
             headers: {
                 accept: "application/json",
                 "content-type": "application/json",
-                Authorization: `Bearer ${process.env.CLOSEBOT_API_KEY}`,
+                Authorization: `Bearer v3PXUAV7pAS5bl3_QI8h7Q`,
             },
             body: JSON.stringify({
                 bot_id: "35831",
